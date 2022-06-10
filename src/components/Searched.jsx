@@ -2,32 +2,30 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link, useParams } from 'react-router-dom'
-import { toast } from 'react-toastify';
 import axiosfetch from '../axios/axios'
+import { toast } from 'react-toastify';
 
-export default function Cuisine() {
+export default function Searched() {
+    const params = useParams();
+    const [searched, setSearched] = useState([])
 
-    let params = useParams();
-    const [cuisine, setCuisine] = useState([])
-    const getCuisine = async (name) => {
+    const getSearched = async (name) => {
         axiosfetch("complexSearch", {
             params: {
-                cuisine: name
+                query: name
             }
         }).then(({ data }) => {
             console.log(data.results)
-            setCuisine(data.results)
+            setSearched(data.results)
 
         }).catch((e) => {
-            toast.error('Recipes unavilable');
+            toast.error('Recipe unavilable');
 
         })
     }
-
     useEffect(() => {
-        console.log("useeffect")
-        getCuisine(params.type)
-    }, [params.type])
+        getSearched(params.search)
+    }, [params.search])
 
     return (
         <Grid
@@ -36,7 +34,7 @@ export default function Cuisine() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
         >
-            {cuisine.map((item) => {
+            {searched.map((item) => {
                 return (
                     <Card key={item.id}>
                         <Link to={"/recipe/" + item.id}>
@@ -49,6 +47,7 @@ export default function Cuisine() {
         </Grid>
     )
 }
+
 
 const Grid = styled(motion.div)`
     display: grid;

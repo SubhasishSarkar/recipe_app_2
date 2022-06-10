@@ -3,6 +3,7 @@ import axiosfetch from '../axios/axios'
 import styled from 'styled-components'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/splide/dist/css/splide.min.css'
+import { Link } from 'react-router-dom'
 
 
 export default function Populer() {
@@ -18,7 +19,7 @@ export default function Populer() {
         else {
             axiosfetch("random", {
                 params: {
-                    apiKey: "b3d2694a2923454cae026f8f116725ea",
+
                     number: 9
                 }
             }).then(({ data }) => {
@@ -39,16 +40,27 @@ export default function Populer() {
                 arrows: false,
                 pagination: false,
                 drag: "free",
-                gap: "2rem"
+                gap: "1.5rem",
+                breakpoints: {
+                    640: {
+                        perPage: 1,
+                        rewind: true,
+                        autoplay: true
+                    },
+                }
             }}>
                 {popular.map((item) => {
                     return (
                         <SplideSlide key={item.id}>
+
                             <Card >
-                                <p >{item.title}</p>
-                                <img src={item.image} alt={item.title} />
-                                <Gradient />
+                                <Link to={"/recipe/" + item.id}>
+                                    <p >{item.title}</p>
+                                    <img src={item.image} alt={item.title} />
+                                    <Gradient />
+                                </Link>
                             </Card>
+
                         </SplideSlide>
                     )
                 })}
